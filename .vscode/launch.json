@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${command:cmake.launchTargetPath}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/arm-none-eabi-gdb",
+      "miDebuggerServerAddress": "localhost:3333",
+      "debugServerPath": "/usr/bin/ST-LINK_gdbserver",
+      "debugServerArgs": "--stm32cubeprogrammer-path /usr/bin/STM32CubeProgrammerBins --swd --port-number 3333",
+      "serverStarted": "Waiting for connection on port .*\\.\\.\\.",
+      "stopAtConnect": true,
+      "postRemoteConnectCommands": [
+        {
+          "text": "load build/debug/build/02226_Firmware.elf"
+        }
+      ],
+      "logging": {
+        "engineLogging": true
+      },
+      "preLaunchTask": "Build"
+    }
+  ]
+}
