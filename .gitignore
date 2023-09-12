@@ -2,3 +2,6 @@
 /.vscode
 /.vs
 /cmake
+CMakeLists.txt
+CMakePresets.json
+vcpkg-configuration.json
