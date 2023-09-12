@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -87,6 +88,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART2_UART_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -95,6 +97,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    // this a comment that we dont want to remove.
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
