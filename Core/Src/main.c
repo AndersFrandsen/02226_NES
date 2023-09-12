@@ -46,6 +46,9 @@
 
 /* USER CODE BEGIN PV */
 
+//UART_HandleTypeDef hlpuart1;
+char message[] = "Hello, World!\r\n";
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,6 +70,7 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -87,8 +91,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART2_UART_Init();
   MX_I2C2_Init();
+  MX_LPUART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -97,7 +101,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // this a comment that we dont want to remove.
+    HAL_Delay(1000);
+    HAL_UART_Transmit(&hlpuart1, (uint8_t*)message, sizeof(message), 100);
 
     /* USER CODE END WHILE */
 

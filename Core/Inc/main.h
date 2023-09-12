@@ -75,10 +75,6 @@ void Error_Handler(void);
 #define B2_GPIO_Port GPIOA
 #define LED3_Pin GPIO_PIN_11
 #define LED3_GPIO_Port GPIOB
-#define T_VCP_RX_Pin GPIO_PIN_3
-#define T_VCP_RX_GPIO_Port GPIOA
-#define T_VCP_RXA2_Pin GPIO_PIN_2
-#define T_VCP_RXA2_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
