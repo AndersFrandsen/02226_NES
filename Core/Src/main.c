@@ -64,7 +64,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 void user_delay_ms(uint32_t period) {
-	HAL_Delay(period);
+  HAL_Delay(period);
 }
 
 int8_t user_i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) {
@@ -80,10 +80,10 @@ int8_t user_i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16
 }
 
 int8_t user_i2c_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data, uint16_t len) {
-	int8_t rslt = 0;
-	HAL_StatusTypeDef status = HAL_OK;
+  int8_t rslt = 0;
+  HAL_StatusTypeDef status = HAL_OK;
 
-	status = HAL_I2C_Mem_Write(&hi2c2, (uint16_t)(dev_id<<1), reg_addr, I2C_MEMADD_SIZE_8BIT, (uint8_t*)reg_data, len, 5);
+  status = HAL_I2C_Mem_Write(&hi2c2, (uint16_t)(dev_id<<1), reg_addr, I2C_MEMADD_SIZE_8BIT, (uint8_t*)reg_data, len, 5);
 
   if (status != HAL_OK)
     rslt = -1;
@@ -127,13 +127,15 @@ int main(void)
 
   HAL_Delay(2000);
 
+  /*
   for (uint8_t i = 0; i < 128; i++) {
-	  if (HAL_I2C_IsDeviceReady(&hi2c2, (uint16_t)(i<<1), 3, 5) == HAL_OK) {
+    if (HAL_I2C_IsDeviceReady(&hi2c2, (uint16_t)(i<<1), 3, 5) == HAL_OK) {
       sprintf(message, "Sensor device on address 0x%2x is ready.\r\n", i);
       HAL_UART_Transmit(&hlpuart1, (uint8_t*)message, sizeof(message), 100);
       memset(message, 0, sizeof(message));
-	  }
+    }
   }
+  */
 
   /* Initializing sensor */
   struct bme680_dev sensor;
@@ -147,6 +149,10 @@ int main(void)
   int8_t rslt = BME680_OK;
   rslt = bme680_init(&sensor);
 
+  if (rslt != 0) {
+    // Initialization failed
+  }
+
   /* Configuring sensor */
   sensor.tph_sett.os_hum = BME680_OS_2X;
   sensor.tph_sett.os_pres = BME680_OS_4X;
@@ -157,7 +163,7 @@ int main(void)
   sensor.gas_sett.heatr_dur = 0;
   sensor.power_mode = BME680_FORCED_MODE;
  
-  uint8_t set_required_settings = BME680_OST_SEL | BME680_OSP_SEL | BME680_OSH_SEL | BME680_FILTER_SEL; // | BME680_GAS_SENSOR_SEL;
+  uint8_t set_required_settings = BME680_OST_SEL | BME680_OSP_SEL | BME680_OSH_SEL | BME680_FILTER_SEL | BME680_GAS_SENSOR_SEL;
 
   rslt = bme680_set_sensor_settings(set_required_settings, &sensor);
   rslt = bme680_set_sensor_mode(&sensor);
@@ -175,7 +181,7 @@ int main(void)
   {
     rslt = bme680_get_sensor_data(&data, &sensor);
 
-    //sprintf(message, "rslt: %d, T: %d C, P: %d hPa, H: %d rH\r\n", rslt, data.temperature / 100, data.pressure / 100, data.humidity / 1000);
+    sprintf(message, "T: %d C, P: %d hPa, H: %d rH\r\n", data.temperature / 100, data.pressure / 100, data.humidity / 1000);
     
     HAL_UART_Transmit(&hlpuart1, (uint8_t*)message, sizeof(message), 100);
     HAL_Delay(5000);
