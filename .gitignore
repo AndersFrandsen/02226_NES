@@ -1,4 +1,5 @@
 /build
+/Debug
 /.vscode
 /.vs
 /cmake
