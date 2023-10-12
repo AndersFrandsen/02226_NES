@@ -23,7 +23,6 @@
 #include "subghz.h"
 #include "usart.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -32,7 +31,6 @@
 #include "stm32wlxx_nucleo.h"
 #include <stdio.h>
 #include <string.h>
-
 
 /* USER CODE END Includes */
 
@@ -262,23 +260,21 @@ int main(void) {
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    /*
-    rslt = bme680_get_sensor_data(&data, &sensor);
-
-    sprintf(message, "T: %d C, P: %d hPa, H: %d rH\r\n", data.temperature / 100,
-    data.pressure / 100, data.humidity / 1000);
-
-    HAL_UART_Transmit(&hlpuart1, (uint8_t*)message, sizeof(message), 100);
-    HAL_Delay(5000);
-
-    rslt = bme680_set_sensor_mode(&sensor);
-  */
-
     eventReceptor = NULL;
     while (eventReceptor == NULL)
       ;
     eventReceptor(&fsm);
+    /*
+        rslt = bme680_get_sensor_data(&data, &sensor);
 
+        sprintf(message, "T: %d C, P: %d hPa, H: %d rH\r\n", data.temperature /
+       100, data.pressure / 100, data.humidity / 1000);
+
+        HAL_UART_Transmit(&hlpuart1, (uint8_t *)message, sizeof(message), 100);
+        // HAL_Delay(5000);
+
+        rslt = bme680_set_sensor_mode(&sensor);
+            */
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -464,12 +460,17 @@ void eventRxDone(pingPongFSM_t *const fsm) {
     switch (fsm->subState) {
     case SSTATE_RX:
       transitionRxDone(fsm);
-      if (strncmp(fsm->rxBuffer, "PONG", 4) == 0) {
+      if (strncmp(fsm->rxBuffer, "iOuC", 4) == 0) {
+        HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Data Received", 13,
+                          HAL_MAX_DELAY);
+
         BSP_LED_Off(LED_GREEN);
         BSP_LED_Toggle(LED_RED);
         enterMasterTx(fsm);
         fsm->subState = SSTATE_TX;
-      } else if (strncmp(fsm->rxBuffer, "PING", 4) == 0) {
+      } else if (strncmp(fsm->rxBuffer, "nX05", 4) == 0) {
+        HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Data Received", 13,
+                          HAL_MAX_DELAY);
         enterSlaveRx(fsm);
         fsm->state = STATE_SLAVE;
       } else {
@@ -484,7 +485,9 @@ void eventRxDone(pingPongFSM_t *const fsm) {
     switch (fsm->subState) {
     case SSTATE_RX:
       transitionRxDone(fsm);
-      if (strncmp(fsm->rxBuffer, "PING", 4) == 0) {
+      if (strncmp(fsm->rxBuffer, "nX05", 4) == 0) {
+        HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Data Received", 13,
+                          HAL_MAX_DELAY);
         BSP_LED_Off(LED_RED);
         BSP_LED_Toggle(LED_GREEN);
         enterSlaveTx(fsm);
@@ -649,7 +652,6 @@ void enterSlaveRx(pingPongFSM_t *const fsm) {
 void enterMasterTx(pingPongFSM_t *const fsm) {
   HAL_Delay(fsm->rxMargin);
 
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"...PING\r\n", 9, HAL_MAX_DELAY);
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Master Tx start\r\n", 17,
                     HAL_MAX_DELAY);
   SUBGRF_SetDioIrqParams(IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
@@ -660,7 +662,7 @@ void enterMasterTx(pingPongFSM_t *const fsm) {
   SUBGRF_WriteRegister(0x0889, (SUBGRF_ReadRegister(0x0889) | 0x04));
   packetParams.Params.LoRa.PayloadLength = 0x4;
   SUBGRF_SetPacketParams(&packetParams);
-  SUBGRF_SendPayload((uint8_t *)"PING", 4, 0);
+  SUBGRF_SendPayload((uint8_t *)"nX05", 4, 0);
 }
 
 /**
@@ -671,7 +673,6 @@ void enterMasterTx(pingPongFSM_t *const fsm) {
 void enterSlaveTx(pingPongFSM_t *const fsm) {
   HAL_Delay(fsm->rxMargin);
 
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"...PONG\r\n", 9, HAL_MAX_DELAY);
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Slave Tx start\r\n", 16,
                     HAL_MAX_DELAY);
   SUBGRF_SetDioIrqParams(IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
@@ -682,7 +683,7 @@ void enterSlaveTx(pingPongFSM_t *const fsm) {
   SUBGRF_WriteRegister(0x0889, (SUBGRF_ReadRegister(0x0889) | 0x04));
   packetParams.Params.LoRa.PayloadLength = 0x4;
   SUBGRF_SetPacketParams(&packetParams);
-  SUBGRF_SendPayload((uint8_t *)"PONG", 4, 0);
+  SUBGRF_SendPayload((uint8_t *)"iOuC", 4, 0);
 }
 
 /**
