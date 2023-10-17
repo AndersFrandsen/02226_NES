@@ -616,8 +616,8 @@ void eventRxError(pingPongFSM_t *const fsm) {
  * @retval None
  */
 void enterMasterRx(pingPongFSM_t *const fsm) {
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Master Rx start\r\n", 17,
-                    HAL_MAX_DELAY);
+  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Master Rx start\r\n", 17,
+  //                  HAL_MAX_DELAY);
   SUBGRF_SetDioIrqParams(
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
@@ -634,8 +634,8 @@ void enterMasterRx(pingPongFSM_t *const fsm) {
  * @retval None
  */
 void enterSlaveRx(pingPongFSM_t *const fsm) {
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Slave Rx start\r\n", 16,
-                    HAL_MAX_DELAY);
+  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Slave Rx start\r\n", 16,
+  //                   HAL_MAX_DELAY);
   SUBGRF_SetDioIrqParams(
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
@@ -654,8 +654,8 @@ void enterSlaveRx(pingPongFSM_t *const fsm) {
 void enterMasterTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   HAL_Delay(fsm->rxMargin);
 
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Master Tx start\r\n", 17,
-                    HAL_MAX_DELAY);
+  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Master Tx start\r\n", 17,
+  //                   HAL_MAX_DELAY);
   char key[22] = "nX05";
   strcat(key, message);
   // HAL_UART_Transmit(&hlpuart1, (uint8_t *)key, sizeof(key), HAL_TIMEOUT);
@@ -678,8 +678,8 @@ void enterMasterTx(pingPongFSM_t *const fsm, char *message, size_t size) {
 void enterSlaveTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   HAL_Delay(fsm->rxMargin);
 
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Slave Tx start\r\n", 16,
-                    HAL_MAX_DELAY);
+  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Slave Tx start\r\n", 16,
+  //                   HAL_MAX_DELAY);
   char key[22] = "iOuC";
   strcat(key, message);
   // HAL_UART_Transmit(&hlpuart1, (uint8_t *)key, sizeof(key), HAL_TIMEOUT);
@@ -711,8 +711,8 @@ void transitionRxDone(pingPongFSM_t *const fsm) {
   SUBGRF_GetPayload((uint8_t *)fsm->rxBuffer, &fsm->rxSize, 0xFF);
   SUBGRF_GetPacketStatus(&packetStatus);
 
-  sprintf(uartBuff, "RssiValue=%d dBm, SnrValue=%d Hz\r\n",
-          packetStatus.Params.LoRa.RssiPkt, packetStatus.Params.LoRa.SnrPkt);
+  sprintf(uartBuff, ",%d,%d\r\n", packetStatus.Params.LoRa.RssiPkt,
+          packetStatus.Params.LoRa.SnrPkt);
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)uartBuff, strlen(uartBuff),
                     HAL_MAX_DELAY);
 }
