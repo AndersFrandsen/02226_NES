@@ -109,6 +109,8 @@ void transitionRxDone(pingPongFSM_t *const fsm);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+#ifdef TRANSMITTER
+
 void user_delay_ms(uint32_t period) { HAL_Delay(period); }
 
 int8_t user_i2c_read(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data,
@@ -138,6 +140,8 @@ int8_t user_i2c_write(uint8_t dev_id, uint8_t reg_addr, uint8_t *reg_data,
 
   return rslt;
 }
+
+#endif
 
 /* USER CODE END 0 */
 
@@ -210,16 +214,10 @@ int main(void) {
   fsm.subState = SSTATE_RX;
 
   HAL_Delay(2000);
+  BSP_LED_Off(LED_BLUE);
+  BSP_LED_On(LED_RED);
 
-  /*
-  for (uint8_t i = 0; i < 128; i++) {
-    if (HAL_I2C_IsDeviceReady(&hi2c2, (uint16_t)(i<<1), 3, 5) == HAL_OK) {
-      sprintf(message, "Sensor device on address 0x%2x is ready.\r\n", i);
-      HAL_UART_Transmit(&hlpuart1, (uint8_t*)message, sizeof(message), 100);
-      memset(message, 0, sizeof(message));
-    }
-  }
-  */
+#ifdef TRANSMITTER
 
   /* Initializing sensor */
   struct bme680_dev sensor;
@@ -259,6 +257,8 @@ int main(void) {
 
   struct bme680_field_data data;
 
+#endif
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -269,15 +269,17 @@ int main(void) {
       ;
     eventReceptor(&fsm);
 
+#ifdef TRANSMITTER
+
     rslt = bme680_get_sensor_data(&data, &sensor);
 
     sprintf(message, ",%d,%d,%d", data.temperature, data.pressure,
             data.humidity);
 
-    //  HAL_UART_Transmit(&hlpuart1, (uint8_t *)message, sizeof(message), 100);
-    // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"\r\n", 2, 100);
-
     rslt = bme680_set_sensor_mode(&sensor);
+
+#endif
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -466,8 +468,8 @@ void eventRxDone(pingPongFSM_t *const fsm) {
       if (strncmp(fsm->rxBuffer, "iOuC", 4) == 0) {
         HAL_UART_Transmit(&hlpuart1, (uint8_t *)fsm->rxBuffer, 22,
                           HAL_MAX_DELAY);
-        BSP_LED_Off(LED_GREEN);
-        BSP_LED_Toggle(LED_RED);
+        BSP_LED_Off(LED_RED);
+        BSP_LED_Toggle(LED_BLUE);
         enterMasterTx(fsm, message, sizeof(message));
         fsm->subState = SSTATE_TX;
       } else if (strncmp(fsm->rxBuffer, "nX05", 4) == 0) {
@@ -491,7 +493,7 @@ void eventRxDone(pingPongFSM_t *const fsm) {
         HAL_UART_Transmit(&hlpuart1, (uint8_t *)fsm->rxBuffer, 22,
                           HAL_MAX_DELAY);
         BSP_LED_Off(LED_RED);
-        BSP_LED_Toggle(LED_GREEN);
+        BSP_LED_Toggle(LED_BLUE);
         enterSlaveTx(fsm, message, sizeof(message));
         fsm->subState = SSTATE_TX;
       } else {
