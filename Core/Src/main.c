@@ -79,7 +79,7 @@ typedef struct {
 
 /* USER CODE BEGIN PV */
 
-char message[22];
+char message[50];
 void (*volatile eventReceptor)(pingPongFSM_t *const fsm);
 PacketParams_t packetParams; // TODO: this is lazy
 const RadioLoRaBandwidths_t Bandwidths[] = {LORA_BW_125, LORA_BW_250,
@@ -264,6 +264,7 @@ int main(void) {
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
+
     eventReceptor = NULL;
     while (eventReceptor == NULL)
       ;
@@ -424,8 +425,6 @@ void RadioOnDioIrq(RadioIrqMasks_t radioIrq) {
  * @retval None
  */
 void eventTxDone(pingPongFSM_t *const fsm) {
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event TX Done\r\n", 15,
-  //                  HAL_MAX_DELAY);
   switch (fsm->state) {
   case STATE_MASTER:
     switch (fsm->subState) {
@@ -452,29 +451,37 @@ void eventTxDone(pingPongFSM_t *const fsm) {
   }
 }
 
+void uartLogEvent(pingPongFSM_t *const fsm) {
+  PacketStatus_t packetStatus;
+  SUBGRF_GetPacketStatus(&packetStatus);
+  char uart_buffer[50];
+  strncpy(uart_buffer, fsm->rxBuffer, fsm->rxSize);
+  uart_buffer[fsm->rxSize] = '\0';
+  sprintf(uart_buffer + fsm->rxSize, ",%d,%d\r\n",
+          packetStatus.Params.LoRa.RssiPkt, packetStatus.Params.LoRa.SnrPkt);
+  HAL_UART_Transmit(&hlpuart1, (uint8_t *)uart_buffer, strlen(uart_buffer),
+                    HAL_MAX_DELAY);
+  BSP_LED_Off(LED_RED);
+  BSP_LED_Toggle(LED_BLUE);
+}
+
 /**
  * @brief  Process the RX Done event
  * @param  fsm pointer to FSM context
  * @retval None
  */
 void eventRxDone(pingPongFSM_t *const fsm) {
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event RX Done\r\n", 15,
-  //                  HAL_MAX_DELAY);
   switch (fsm->state) {
   case STATE_MASTER:
     switch (fsm->subState) {
     case SSTATE_RX:
       transitionRxDone(fsm);
       if (strncmp(fsm->rxBuffer, "iOuC", 4) == 0) {
-        HAL_UART_Transmit(&hlpuart1, (uint8_t *)fsm->rxBuffer, 22,
-                          HAL_MAX_DELAY);
-        BSP_LED_Off(LED_RED);
-        BSP_LED_Toggle(LED_BLUE);
-        enterMasterTx(fsm, message, sizeof(message));
+        uartLogEvent(fsm);
+        enterMasterTx(fsm, message, strlen(message));
         fsm->subState = SSTATE_TX;
       } else if (strncmp(fsm->rxBuffer, "nX05", 4) == 0) {
-        HAL_UART_Transmit(&hlpuart1, (uint8_t *)fsm->rxBuffer, 22,
-                          HAL_MAX_DELAY);
+        uartLogEvent(fsm);
         enterSlaveRx(fsm);
         fsm->state = STATE_SLAVE;
       } else {
@@ -490,11 +497,8 @@ void eventRxDone(pingPongFSM_t *const fsm) {
     case SSTATE_RX:
       transitionRxDone(fsm);
       if (strncmp(fsm->rxBuffer, "nX05", 4) == 0) {
-        HAL_UART_Transmit(&hlpuart1, (uint8_t *)fsm->rxBuffer, 22,
-                          HAL_MAX_DELAY);
-        BSP_LED_Off(LED_RED);
-        BSP_LED_Toggle(LED_BLUE);
-        enterSlaveTx(fsm, message, sizeof(message));
+        uartLogEvent(fsm);
+        enterSlaveTx(fsm, message, strlen(message));
         fsm->subState = SSTATE_TX;
       } else {
         enterMasterRx(fsm);
@@ -516,7 +520,7 @@ void eventRxDone(pingPongFSM_t *const fsm) {
  * @retval None
  */
 void eventTxTimeout(pingPongFSM_t *const fsm) {
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event TX Timeout\r\n", 18,
+  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event TX Timeout,,,,\r\n", 22,
                     HAL_MAX_DELAY);
   switch (fsm->state) {
   case STATE_MASTER:
@@ -550,14 +554,14 @@ void eventTxTimeout(pingPongFSM_t *const fsm) {
  * @retval None
  */
 void eventRxTimeout(pingPongFSM_t *const fsm) {
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event RX Timeout\r\n", 18,
+  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event RX Timeout,,,,\r\n", 22,
                     HAL_MAX_DELAY);
   switch (fsm->state) {
   case STATE_MASTER:
     switch (fsm->subState) {
     case SSTATE_RX:
       HAL_Delay(fsm->randomDelay);
-      enterMasterTx(fsm, message, sizeof(message));
+      enterMasterTx(fsm, message, strlen(message));
       fsm->subState = SSTATE_TX;
       break;
     default:
@@ -584,14 +588,14 @@ void eventRxTimeout(pingPongFSM_t *const fsm) {
  * @retval None
  */
 void eventRxError(pingPongFSM_t *const fsm) {
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event Rx Error\r\n", 16,
+  HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event RX Error,,,,\r\n", 20,
                     HAL_MAX_DELAY);
   switch (fsm->state) {
   case STATE_MASTER:
     switch (fsm->subState) {
     case SSTATE_RX:
       HAL_Delay(fsm->randomDelay);
-      enterMasterTx(fsm, message, sizeof(message));
+      enterMasterTx(fsm, message, strlen(message));
       fsm->subState = SSTATE_TX;
       break;
     default:
@@ -618,8 +622,6 @@ void eventRxError(pingPongFSM_t *const fsm) {
  * @retval None
  */
 void enterMasterRx(pingPongFSM_t *const fsm) {
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Master Rx start\r\n", 17,
-  //                  HAL_MAX_DELAY);
   SUBGRF_SetDioIrqParams(
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
@@ -636,8 +638,6 @@ void enterMasterRx(pingPongFSM_t *const fsm) {
  * @retval None
  */
 void enterSlaveRx(pingPongFSM_t *const fsm) {
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Slave Rx start\r\n", 16,
-  //                   HAL_MAX_DELAY);
   SUBGRF_SetDioIrqParams(
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
       IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT | IRQ_CRC_ERROR | IRQ_HEADER_ERROR,
@@ -655,11 +655,8 @@ void enterSlaveRx(pingPongFSM_t *const fsm) {
  */
 void enterMasterTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   HAL_Delay(fsm->rxMargin);
-
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Master Tx start\r\n", 17,
-  //                   HAL_MAX_DELAY);
-  char key[22] = "nX05";
-  strcat(key, message);
+  char payload[50] = "nX05";
+  strcat(payload, message);
   // HAL_UART_Transmit(&hlpuart1, (uint8_t *)key, sizeof(key), HAL_TIMEOUT);
   SUBGRF_SetDioIrqParams(IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
                          IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT, IRQ_RADIO_NONE,
@@ -667,9 +664,9 @@ void enterMasterTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   SUBGRF_SetSwitch(RFO_LP, RFSWITCH_TX);
   // Workaround 5.1 in DS.SX1261-2.W.APP (before each packet transmission)
   SUBGRF_WriteRegister(0x0889, (SUBGRF_ReadRegister(0x0889) | 0x04));
-  packetParams.Params.LoRa.PayloadLength = sizeof(key); // 0x9;
+  packetParams.Params.LoRa.PayloadLength = strlen(payload);
   SUBGRF_SetPacketParams(&packetParams);
-  SUBGRF_SendPayload((uint8_t *)key, sizeof(key), 0);
+  SUBGRF_SendPayload((uint8_t *)payload, strlen(payload), 0);
 }
 
 /**
@@ -679,11 +676,8 @@ void enterMasterTx(pingPongFSM_t *const fsm, char *message, size_t size) {
  */
 void enterSlaveTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   HAL_Delay(fsm->rxMargin);
-
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Slave Tx start\r\n", 16,
-  //                   HAL_MAX_DELAY);
-  char key[22] = "iOuC";
-  strcat(key, message);
+  char payload[50] = "iOuC";
+  strcat(payload, message);
   // HAL_UART_Transmit(&hlpuart1, (uint8_t *)key, sizeof(key), HAL_TIMEOUT);
   SUBGRF_SetDioIrqParams(IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
                          IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT, IRQ_RADIO_NONE,
@@ -691,9 +685,9 @@ void enterSlaveTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   SUBGRF_SetSwitch(RFO_LP, RFSWITCH_TX);
   // Workaround 5.1 in DS.SX1261-2.W.APP (before each packet transmission)
   SUBGRF_WriteRegister(0x0889, (SUBGRF_ReadRegister(0x0889) | 0x04));
-  packetParams.Params.LoRa.PayloadLength = sizeof(key);
+  packetParams.Params.LoRa.PayloadLength = strlen(payload);
   SUBGRF_SetPacketParams(&packetParams);
-  SUBGRF_SendPayload((uint8_t *)key, sizeof(key), 0);
+  SUBGRF_SendPayload((uint8_t *)payload, strlen(payload), 0);
 }
 
 /**
@@ -703,8 +697,6 @@ void enterSlaveTx(pingPongFSM_t *const fsm, char *message, size_t size) {
  */
 void transitionRxDone(pingPongFSM_t *const fsm) {
   PacketStatus_t packetStatus;
-  char uartBuff[50];
-
   // Workaround 15.3 in DS.SX1261-2.W.APP (because following RX w/ timeout
   // sequence)
   SUBGRF_WriteRegister(0x0920, 0x00);
@@ -712,11 +704,6 @@ void transitionRxDone(pingPongFSM_t *const fsm) {
 
   SUBGRF_GetPayload((uint8_t *)fsm->rxBuffer, &fsm->rxSize, 0xFF);
   SUBGRF_GetPacketStatus(&packetStatus);
-
-  sprintf(uartBuff, ",%d,%d\r\n", packetStatus.Params.LoRa.RssiPkt,
-          packetStatus.Params.LoRa.SnrPkt);
-  HAL_UART_Transmit(&hlpuart1, (uint8_t *)uartBuff, strlen(uartBuff),
-                    HAL_MAX_DELAY);
 }
 
 /* USER CODE END 4 */
