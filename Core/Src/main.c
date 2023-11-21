@@ -522,6 +522,8 @@ void eventRxDone(pingPongFSM_t *const fsm) {
 void eventTxTimeout(pingPongFSM_t *const fsm) {
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event TX Timeout,,,,\r\n", 22,
                     HAL_MAX_DELAY);
+  BSP_LED_Off(LED_BLUE);
+  BSP_LED_On(LED_RED);
   switch (fsm->state) {
   case STATE_MASTER:
     switch (fsm->subState) {
@@ -556,6 +558,8 @@ void eventTxTimeout(pingPongFSM_t *const fsm) {
 void eventRxTimeout(pingPongFSM_t *const fsm) {
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event RX Timeout,,,,\r\n", 22,
                     HAL_MAX_DELAY);
+  BSP_LED_Off(LED_BLUE);
+  BSP_LED_On(LED_RED);
   switch (fsm->state) {
   case STATE_MASTER:
     switch (fsm->subState) {
@@ -590,6 +594,8 @@ void eventRxTimeout(pingPongFSM_t *const fsm) {
 void eventRxError(pingPongFSM_t *const fsm) {
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)"Event RX Error,,,,\r\n", 20,
                     HAL_MAX_DELAY);
+  BSP_LED_Off(LED_BLUE);
+  BSP_LED_On(LED_RED);
   switch (fsm->state) {
   case STATE_MASTER:
     switch (fsm->subState) {
