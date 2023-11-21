@@ -20,6 +20,7 @@
 #include "main.h"
 #include "gpio.h"
 #include "i2c.h"
+#include "stm32wlxx_hal.h"
 #include "stm32wlxx_hal_def.h"
 #include "stm32wlxx_hal_uart.h"
 #include "subghz.h"
@@ -68,7 +69,7 @@ typedef struct {
 #define RF_FREQUENCY 868000000 /* Hz */
 #define TX_OUTPUT_POWER 14     /* dBm */
 #define LORA_BANDWIDTH 0       /* Hz */
-#define LORA_SPREADING_FACTOR 7
+#define LORA_SPREADING_FACTOR 10
 #define LORA_CODINGRATE 1
 #define LORA_PREAMBLE_LENGTH 8 /* Same for Tx and Rx */
 #define LORA_SYMBOL_TIMEOUT 5  /* Symbols */
@@ -181,7 +182,8 @@ int main(void) {
   MX_SUBGHZ_Init();
   /* USER CODE BEGIN 2 */
 
-  strcpy(uartBuff, "\n\rPING PONG\r\nAPP_VERSION=0.0.1\r\n---------------\r\n");
+  strcpy(uartBuff,
+         "\n\r02226 Networked Embedded Systems\r\nDTU\r\n---------------\r\n");
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)uartBuff, strlen(uartBuff),
                     HAL_MAX_DELAY);
   sprintf(uartBuff, "LORA_MODULATION\r\nLORA_BW=%d Hz\r\nLORA_SF=%d\r\n",
@@ -663,7 +665,6 @@ void enterMasterTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   HAL_Delay(fsm->rxMargin);
   char payload[50] = "nX05";
   strcat(payload, message);
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)key, sizeof(key), HAL_TIMEOUT);
   SUBGRF_SetDioIrqParams(IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
                          IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT, IRQ_RADIO_NONE,
                          IRQ_RADIO_NONE);
@@ -684,7 +685,6 @@ void enterSlaveTx(pingPongFSM_t *const fsm, char *message, size_t size) {
   HAL_Delay(fsm->rxMargin);
   char payload[50] = "iOuC";
   strcat(payload, message);
-  // HAL_UART_Transmit(&hlpuart1, (uint8_t *)key, sizeof(key), HAL_TIMEOUT);
   SUBGRF_SetDioIrqParams(IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT,
                          IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT, IRQ_RADIO_NONE,
                          IRQ_RADIO_NONE);
