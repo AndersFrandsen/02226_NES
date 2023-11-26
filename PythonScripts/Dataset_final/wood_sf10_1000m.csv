@@ -1,0 +1,113 @@
+ts,pwd,temp,atm,hum,rssi,snr
+10:57:36,nX05,325,102409,65206,-111,-16
+10:57:39,Event RX Timeout,,,,
+10:57:42,Event RX Timeout,,,,
+10:57:45,nX05,325,102411,65206,-111,-16
+10:57:49,Event RX Timeout,,,,
+10:57:50,nX05,325,102411,65206,-111,-16
+10:57:53,Event RX Timeout,,,,
+10:57:54,nX05,325,102409,65206,-111,-14
+10:57:56,nX05,325,102407,65199,-110,-14
+10:57:59,Event RX Timeout,,,,
+10:58:00,Event RX Error,,,,
+10:58:03,Event RX Timeout,,,,
+10:58:06,Event RX Timeout,,,,
+10:58:09,Event RX Error,,,,
+10:58:12,Event RX Timeout,,,,
+10:58:15,Event RX Timeout,,,,
+10:58:18,Event RX Timeout,,,,
+10:58:21,Event RX Timeout,,,,
+10:58:23,nX05,327,102405,65216,-111,-13
+10:58:26,Event RX Timeout,,,,
+10:58:29,Event RX Timeout,,,,
+10:58:32,Event RX Timeout,,,,
+10:58:35,Event RX Timeout,,,,
+10:58:38,Event RX Timeout,,,,
+10:58:41,Event RX Timeout,,,,
+10:58:44,Event RX Timeout,,,,
+10:58:47,Event RX Timeout,,,,
+10:58:50,Event RX Timeout,,,,
+10:58:53,Event RX Timeout,,,,
+10:58:56,Event RX Timeout,,,,
+10:58:59,Event RX Timeout,,,,
+10:59:02,Event RX Timeout,,,,
+10:59:04,nX05,328,102397,65245,-111,-17
+10:59:08,Event RX Timeout,,,,
+10:59:11,Event RX Timeout,,,,
+10:59:13,nX05,328,102399,65258,-111,-14
+10:59:17,Event RX Timeout,,,,
+10:59:18,nX05,328,102397,65265,-111,-16
+10:59:21,Event RX Timeout,,,,
+10:59:24,Event RX Timeout,,,,
+10:59:27,nX05,329,102397,65261,-111,-16
+10:59:30,Event RX Timeout,,,,
+10:59:33,Event RX Timeout,,,,
+10:59:36,Event RX Timeout,,,,
+10:59:39,Event RX Timeout,,,,
+10:59:42,Event RX Timeout,,,,
+10:59:45,Event RX Timeout,,,,
+10:59:48,Event RX Timeout,,,,
+10:59:49,nX05,329,102397,65248,-111,-15
+10:59:52,Event RX Timeout,,,,
+10:59:55,Event RX Timeout,,,,
+10:59:58,nX05,329,102397,65255,-111,-13
+11:00:01,Event RX Timeout,,,,
+11:00:02,nX05,329,102399,65248,-111,-12
+11:00:05,Event RX Timeout,,,,
+11:00:07,Event RX Error,,,,
+11:00:10,Event RX Timeout,,,,
+11:00:11,nX05,330,102401,65235,-111,-18
+11:00:15,Event RX Timeout,,,,
+11:00:16,Event RX Error,,,,
+11:00:19,Event RX Timeout,,,,
+11:00:20,nX05,329,102399,65241,-111,-18
+11:00:24,Event RX Timeout,,,,
+11:00:27,Event RX Timeout,,,,
+11:00:29,Event RX Error,,,,
+11:00:32,Event RX Timeout,,,,
+11:00:33,nX05,328,102403,65209,-111,-18
+11:00:37,Event RX Timeout,,,,
+11:00:38,nX05,328,102403,65209,-111,-15
+11:00:41,Event RX Timeout,,,,
+11:00:44,Event RX Timeout,,,,
+11:00:47,Event RX Timeout,,,,
+11:00:50,Event RX Timeout,,,,
+11:00:51,nX05,327,102401,65183,-111,-13
+11:00:55,Event RX Timeout,,,,
+11:00:58,Event RX Timeout,,,,
+11:01:00,nX05,327,102399,65169,-111,-16
+11:01:04,Event RX Timeout,,,,
+11:01:05,nX05,327,102401,65176,-111,-17
+11:01:08,Event RX Timeout,,,,
+11:01:09,nX05,326,102401,65166,-111,-17
+11:01:12,Event RX Timeout,,,,
+11:01:15,Event RX Timeout,,,,
+11:01:18,Event RX Timeout,,,,
+11:01:21,Event RX Timeout,,,,
+11:01:24,Event RX Timeout,,,,
+11:01:27,Event RX Timeout,,,,
+11:01:31,Event RX Timeout,,,,
+11:01:31,nX05,326,102403,65146,-111,-17
+11:01:35,Event RX Timeout,,,,
+11:01:38,Event RX Timeout,,,,
+11:01:41,Event RX Timeout,,,,
+11:01:44,Event RX Timeout,,,,
+11:01:47,Event RX Timeout,,,,
+11:01:50,Event RX Timeout,,,,
+11:01:53,Event RX Timeout,,,,
+11:01:56,Event RX Timeout,,,,
+11:01:59,Event RX Timeout,,,,
+11:02:02,Event RX Timeout,,,,
+11:02:05,Event RX Timeout,,,,
+11:02:07,nX05,326,102405,65160,-111,-16
+11:02:10,Event RX Timeout,,,,
+11:02:13,Event RX Timeout,,,,
+11:02:15,Event RX Error,,,,
+11:02:18,Event RX Timeout,,,,
+11:02:21,Event RX Timeout,,,,
+11:02:24,Event RX Timeout,,,,
+11:02:28,Event RX Timeout,,,,
+11:02:31,Event RX Timeout,,,,
+11:02:33,nX05,328,102403,65189,-111,-16
+11:02:37,Event RX Timeout,,,,
+11:02:38,nX05,328,102403,65202,-111,-17
