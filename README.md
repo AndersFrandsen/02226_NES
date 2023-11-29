@@ -4,8 +4,8 @@
 
 This repo contains the software that has been developed and utilised for the Nucleo-64 boards, each equipped with an STM32WL55 microcontroller and integrated LoRa antennas.
 
-This repo contains the data that was logged during the experiments.
-EXPLAIN the files
+The **PyhtonScripts** folder contains the original logs, the cleaned data (as .csv files) and all the scipts that were used to analyse the data retrieved from the experiments.
+
 
 The performed experiments are depicted as follows:
 
@@ -14,7 +14,7 @@ The performed experiments are depicted as follows:
 
 The GPS coordinates are:
 
-### Open Air Land
+### Open Space Land
 
 `A   :  55.78636650157967, 12.559542308987607`
 
@@ -38,7 +38,7 @@ The GPS coordinates are:
 
 --------------------------------------------------------
 
-Some images:
+Some images taken during the experiments:
 
 
 ![A6585454-A26D-4D92-82E2-7DAB040E4FDC_4_5005_c](https://github.com/AndersFrandsen/02226_NES/assets/108626122/8c877a3b-5640-4e8b-8873-cf5a4aaaa167)
@@ -49,7 +49,7 @@ Some images:
 
 ---
 
-## Useful bibliography:
+## Useful bibliography and references:
 
 STMicroelectronics, ``STM32WL Nucleo-64 board (MB1389),`` STMicroelectronics, [pdf]. Available: https://www.st.com/resource/en/user\_manual/um2592-stm32wl-nucleo64-board-mb1389-stmicroelectronics.pdf.
 
