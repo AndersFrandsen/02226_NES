@@ -47,8 +47,9 @@ Some images:
 
 
 
+---
 
-Useful bibliography:
+## Useful bibliography:
 
 STMicroelectronics, ``STM32WL Nucleo-64 board (MB1389),`` STMicroelectronics, [pdf]. Available: https://www.st.com/resource/en/user\_manual/um2592-stm32wl-nucleo64-board-mb1389-stmicroelectronics.pdf.
 
