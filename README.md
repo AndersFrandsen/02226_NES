@@ -56,6 +56,8 @@ STMicroelectronics, ``STM32WL Nucleo-64 board (MB1389),`` STMicroelectronics, [p
 Adafruit, ``Adafruit BME680 - Temperature, Humidity, Pressure and Gas Sensor, Adafruit, [Online]. Available: https://www.adafruit.com/product/3660.
 Bosch Sensortec, ``Driver,`` GitHub, [Online]. Available: https://github.com/boschsensortec/BME680\_driver.
 
+Bosch Sensortec, ``Driver,`` GitHub, [Online]. Available: https://github.com/boschsensortec/BME680\_driver.
+
 STMicroelectronics, ``Description of STM32WL HAL and low-layer drivers,`` STMicroelectronics, [pdf]. https://www.st.com/resource/en/user\_manual/um2642-description-of-stm32wl-hal-and-lowlayer-drivers-stmicroelectronics.pdf.
 
 STMicroelectronics, ``How to Build a LoRa Application with STM32CubeWL, STMicroelectronics, [pdf]. Available: https://www.st.com/resource/en/application\_note/an5406-how-to-build-a-lora-application-with-stm32cubewl-stmicroelectronics.pdf
